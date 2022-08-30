@@ -31,8 +31,8 @@ const displayPhones=(phones,dataLimit)=>{
         <div class="card h-50">
                     <img src="${phone.image}" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title">Phone Name: ${phone.phone_name}</h5>
-                      <p class="card-text">Slug: ${phone.slug}</p>
+                      <h5 class="card-title"> ${phone.phone_name}</h5>
+                      <button onclick="loadPhoneDetail('${phone.slug}')" class="btn btn-primary">Show All</button>
                     </div>
             </div>
         `
@@ -40,17 +40,22 @@ const displayPhones=(phones,dataLimit)=>{
     });
     loadSpinner(false)
 }
-
-const processSearch=dataLimit=>{
+const processSearch=(dataLimit)=>{
     loadSpinner(true)
     const inputField=document.getElementById('exampleFormControlInput1')
     const inputText=inputField.value
     loadPhone(inputText,dataLimit)
-   
 }
+
 document.getElementById('button-search').addEventListener('click',function(){
- processSearch(10)
+    processSearch(10)
 })
+document.getElementById('exampleFormControlInput1').addEventListener('keypress', function (e) {
+//    console.log(e.key)
+    if (e.key === 'Enter') {
+        processSearch(10)
+    }
+});
 
 const loadSpinner=isLoad=>{
     const toggleSpinner=document.getElementById('loader')
@@ -64,6 +69,12 @@ const loadSpinner=isLoad=>{
 // not the best way to show All
 document.getElementById('btn-show-all').addEventListener('click',function(){
     processSearch();
-   
 })
+
+const loadPhoneDetail=id =>{
+    const url=(`https://openapi.programming-hero.com/api/phone/${id}`)
+   fetch(url)
+   .then(res=> res.json())
+   .then(data=> console.log(data.data))
+}
 // loadPhone('samsung')
