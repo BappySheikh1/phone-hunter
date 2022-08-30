@@ -32,7 +32,7 @@ const displayPhones=(phones,dataLimit)=>{
                     <img src="${phone.image}" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title"> ${phone.phone_name}</h5>
-                      <button onclick="loadPhoneDetail('${phone.slug}')" class="btn btn-primary">Show All</button>
+                      <button onclick="loadPhoneDetail('${phone.slug}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Show All</button>
                     </div>
             </div>
         `
@@ -75,6 +75,19 @@ const loadPhoneDetail=id =>{
     const url=(`https://openapi.programming-hero.com/api/phone/${id}`)
    fetch(url)
    .then(res=> res.json())
-   .then(data=> console.log(data.data))
+   .then(data=> displyPhoneDetail(data.data))
 }
-// loadPhone('samsung')
+const displyPhoneDetail=phone=>{
+    console.log(phone)
+    const modalTitle=document.getElementById('exampleModalLabel')
+    modalTitle.innerText=phone.name;
+    const phoneDetail=document.getElementById('phone-detail')
+    phoneDetail.innerHTML=`
+    <img src="${phone.image}">
+    <p>Release Date: ${phone.releaseDate? phone.releaseDate:"no release date information found"}</p>
+    <p>Bluetooth: ${phone.others? phone.others.Bluetooth:"no bluetooth information found"}</p>
+    <p>Memory: ${phone.mainFeatures? phone.mainFeatures.memory:'no memory information found'}</p>
+    <p>Sensors: ${phone.mainFeatures? phone.mainFeatures.sensors[0]:'no sensor information found'}</p>
+    `
+}
+loadPhone('samsung')
